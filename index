@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorti365 - Pronósticos y Juegos</title>
+    <!-- Tailwind CSS para maquetación rápida -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #060e0a;
+            overflow-x: hidden;
+        }
+        /* Efecto de Luces de Estadio y Atmósfera de Fútbol */
+        .stadium-glow {
+            background: 
+                radial-gradient(circle at 50% 10%, rgba(34, 197, 94, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 50% 90%, rgba(22, 163, 74, 0.15) 0%, transparent 50%),
+                linear-gradient(to bottom, #040a07, #0b1c12, #040a07);
+        }
+        /* Tipografía estilo Copa Mundial */
+        .world-cup-title {
+            text-shadow: 0 4px 12px rgba(249, 115, 22, 0.5), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        /* Botón con brillo neon verde */
+        .btn-neon-glow {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        /* Animación de pulso suave */
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(34, 197, 94, 0.7); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="stadium-glow text-white min-h-screen flex flex-col justify-between relative selection:bg-emerald-500 selection:text-black">
+
+    <!-- CANVAS PARA PARTÍCULAS FLOTANTES DE ESTADIO -->
+    <canvas id="particles-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-grow flex items-center justify-center p-4 relative z-10">
+        
+        <div class="w-full max-w-md text-center flex flex-col items-center">
+            
+            <!-- Logo Superior (Estilo Sorti365) -->
+            <div class="mb-12 flex items-center gap-2 justify-center bg-black/40 backdrop-blur-md py-2 px-5 rounded-full border border-emerald-500/10">
+                <span class="text-emerald-500 animate-spin" style="animation-duration: 12s;">
+                    <!-- Trébol / Estrella Verde de Sorti365 SVG -->
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2a3 3 0 0 0-3 3c0 1.14.64 2.13 1.58 2.63A4 4 0 0 0 7 11c0 1.14.64 2.13 1.58 2.63A3 3 0 1 0 12 22a3 3 0 0 0 3-3c0-1.14-.64-2.13-1.58-2.63A4 4 0 0 0 17 13c0-1.14-.64-2.13-1.58-2.63A3 3 0 0 0 12 2zm0 14a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-4-4a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-4-4a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+                    </svg>
+                </span>
+                <div>
+                    <span id="view-brand-name" class="font-black text-lg tracking-tight text-white uppercase">Sorti<span class="text-emerald-500">365</span></span>
+                    <span class="block text-[8px] tracking-widest text-emerald-400/80 font-bold uppercase -mt-1">Pronósticos y juegos</span>
+                </div>
+            </div>
+
+            <!-- TÍTULOS CENTRALES (Inspirados en la imagen del mundial) -->
+            <div class="mb-14 px-4">
+                <!-- Luces de reflectores simuladas en el fondo del texto -->
+                <div class="absolute w-72 h-32 bg-emerald-500/10 rounded-full blur-3xl -translate-y-12 left-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+                <span id="view-brand-subtitle" class="block text-sm font-bold uppercase tracking-[0.25em] text-emerald-400 mb-2">Soporte y Registro VIP</span>
+                
+                <h1 id="view-main-title" class="text-5xl md:text-6xl font-extrabold tracking-tighter text-white uppercase leading-none drop-shadow-lg mb-2">
+                    COPA
+                </h1>
+                <h1 id="view-accent-title" class="world-cup-title text-6xl md:text-7xl font-extrabold tracking-tighter text-orange-500 uppercase leading-none drop-shadow-xl italic">
+                    MUNDIAL
+                </h1>
+            </div>
+
+            <!-- BOTÓN ÚNICO DE ALTA CONVERSIÓN -->
+            <div class="w-full px-4 mb-6">
+                <!-- target="_top" evita cualquier bloqueo de WebKit/Safari al abrir desde apps como Instagram o Facebook -->
+                <a id="btn-main-action" href="https://api.whatsapp.com/send?phone=593963041121&text=hola%20vengo%20de%20parte%20de%20chuky" target="_top" class="btn-neon-glow animate-pulse-glow flex flex-col items-center justify-center w-full py-5 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 active:scale-95 text-slate-950 rounded-2xl transition-all duration-200">
+                    <span id="view-btn-text" class="text-xl font-black uppercase tracking-wider">🟢 INGRESAR AL CHAT VIP</span>
+                    <span id="view-btn-subtext" class="text-xs text-slate-950/75 font-semibold mt-1">Registrarse & Obtener Pronósticos</span>
+                </a>
+            </div>
+
+            <!-- Sello de Juego Responsable -->
+            <p id="view-disclaimer" class="text-[9px] text-emerald-500/60 uppercase tracking-widest font-semibold">
+                🔞 Juega con responsabilidad | Aplican T&C
+            </p>
+
+        </div>
+    </main>
+
+    <!-- BOTÓN DE CONFIGURACIÓN MODERADO -->
+    <div class="absolute bottom-4 left-4 z-20">
+        <button onclick="toggleConfig()" class="p-2.5 bg-black/60 hover:bg-black/80 border border-white/5 hover:border-white/15 rounded-xl text-slate-400 hover:text-emerald-400 transition-all shadow-md">
+            <!-- Icono de configuración simple -->
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+    </div>
+
+    <!-- PANEL DE CONFIGURACIÓN MODAL -->
+    <div id="config-panel" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-white/10 w-full max-w-lg rounded-3xl p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+            
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Configuración del Puente</h3>
+                    <p class="text-xs text-slate-400">Edita los textos y descarga tu propia web</p>
+                </div>
+                <button onclick="toggleConfig()" class="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-all text-sm font-bold">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-4 text-left">
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Tu número de WhatsApp</label>
+                    <input type="tel" id="input-phone" value="593963041121" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:border-emerald-500 transition-all">
+                </div>
+
+                <!-- Mensaje de WhatsApp -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Mensaje de Bienvenida (Chuky)</label>
+                    <input type="text" id="input-msg" value="hola vengo de parte de chuky" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:border-emerald-500 transition-all">
+                </div>
+
+                <!-- Título Superior -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Mini Subtítulo Superior</label>
+                    <input type="text" id="input-brand-subtitle" value="Soporte y Registro VIP" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:border-emerald-500 transition-all">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Título 1 -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Título Principal 1 (Blanco)</label>
+                        <input type="text" id="input-main-title" value="COPA" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 outline-none">
+                    </div>
+                    <!-- Título 2 -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Título Principal 2 (Naranja)</label>
+                        <input type="text" id="input-accent-title" value="MUNDIAL" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Texto Botón -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Texto del Botón</label>
+                        <input type="text" id="input-btn-text" value="🟢 INGRESAR AL CHAT VIP" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 outline-none">
+                    </div>
+                    <!-- Subtexto Botón -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Subtexto del Botón</label>
+                        <input type="text" id="input-btn-subtext" value="Registrarse & Obtener Pronósticos" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 outline-none">
+                    </div>
+                </div>
+
+                <!-- Términos de Juego -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Sello Legal Inferior</label>
+                    <input type="text" id="input-disclaimer" value="🔞 Juega con responsabilidad | Aplican T&C" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:border-emerald-500 transition-all">
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="mt-6 pt-4 border-t border-white/5 flex gap-3">
+                <button onclick="applyChanges()" class="flex-grow py-3 px-4 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold rounded-xl text-sm transition-all">
+                    Aplicar Cambios
+                </button>
+                <button onclick="downloadSelf()" class="flex-grow py-3 px-4 bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold rounded-xl text-sm transition-all border border-white/10 flex items-center justify-center gap-2">
+                    📥 Descargar Web
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer decorativo -->
+    <footer class="py-4 text-center text-[10px] text-emerald-500/30 font-semibold uppercase tracking-widest relative z-10 bg-black/25">
+        &copy; Sorti365 Secure Bridge Technology
+    </footer>
+
+    <!-- Notificaciones Flotantes -->
+    <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 bg-emerald-500 text-slate-950 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 transition-all duration-300 z-50 text-sm font-bold">
+        <span id="toast-msg">¡Listo!</span>
+    </div>
+
+    <!-- SCRIPT DE EFECTOS VISUALES Y CONTROL DE CONFIGURACIÓN -->
+    <script>
+        // Configuración por defecto
+        let config = {
+            phone: "593963041121",
+            msg: "hola vengo de parte de chuky",
+            brandSubtitle: "Soporte y Registro VIP",
+            mainTitle: "COPA",
+            accentTitle: "MUNDIAL",
+            btnText: "🟢 INGRESAR AL CHAT VIP",
+            btnSubtext: "Registrarse & Obtener Pronósticos",
+            disclaimer: "🔞 Juega con responsabilidad | Aplican T&C"
+        };
+
+        // Mostrar u ocultar el panel de configuración
+        function toggleConfig() {
+            const panel = document.getElementById('config-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        // Aplicar los cambios ingresados en los inputs
+        function applyChanges() {
+            config.phone = document.getElementById('input-phone').value.replace(/[^0-9]/g, '');
+            config.msg = document.getElementById('input-msg').value;
+            config.brandSubtitle = document.getElementById('input-brand-subtitle').value;
+            config.mainTitle = document.getElementById('input-main-title').value;
+            config.accentTitle = document.getElementById('input-accent-title').value;
+            config.btnText = document.getElementById('input-btn-text').value;
+            config.btnSubtext = document.getElementById('input-btn-subtext').value;
+            config.disclaimer = document.getElementById('input-disclaimer').value;
+
+            updateDOM();
+            toggleConfig();
+            showToast("¡Diseño actualizado con éxito!");
+        }
+
+        // Actualizar visualmente la página
+        function updateDOM() {
+            document.getElementById('view-brand-subtitle').innerText = config.brandSubtitle;
+            document.getElementById('view-main-title').innerText = config.mainTitle;
+            document.getElementById('view-accent-title').innerText = config.accentTitle;
+            document.getElementById('view-btn-text').innerText = config.btnText;
+            document.getElementById('view-btn-subtext').innerText = config.btnSubtext;
+            document.getElementById('view-disclaimer').innerText = config.disclaimer;
+
+            // Actualizar el enlace principal del botón
+            const finalWaUrl = `https://api.whatsapp.com/send?phone=${config.phone}&text=${encodeURIComponent(config.msg)}`;
+            document.getElementById('btn-main-action').href = finalWaUrl;
+        }
+
+        // Descargar tu propia versión nativa ya configurada
+        function downloadSelf() {
+            let currentHTML = document.documentElement.outerHTML;
+
+            // Guardar el estado de variables de configuración por defecto
+            const regexConfig = /let config = \{[\s\S]*?\};/;
+            const newConfigString = `let config = {
+            phone: "${config.phone}",
+            msg: "${config.msg.replace(/"/g, '\\"')}",
+            brandSubtitle: "${config.brandSubtitle.replace(/"/g, '\\"')}",
+            mainTitle: "${config.mainTitle.replace(/"/g, '\\"')}",
+            accentTitle: "${config.accentTitle.replace(/"/g, '\\"')}",
+            btnText: "${config.btnText.replace(/"/g, '\\"')}",
+            btnSubtext: "${config.btnSubtext.replace(/"/g, '\\"')}",
+            disclaimer: "${config.disclaimer.replace(/"/g, '\\"')}"
+        };`;
+
+            currentHTML = currentHTML.replace(regexConfig, newConfigString);
+
+            // Reemplazar valores de inputs en el archivo para que se queden fijos
+            currentHTML = currentHTML.replace(/id="input-phone" value=".*?"/, `id="input-phone" value="${config.phone}"`);
+            currentHTML = currentHTML.replace(/id="input-msg" value=".*?"/, `id="input-msg" value="${config.msg}"`);
+            currentHTML = currentHTML.replace(/id="input-brand-subtitle" value=".*?"/, `id="input-brand-subtitle" value="${config.brandSubtitle}"`);
+            currentHTML = currentHTML.replace(/id="input-main-title" value=".*?"/, `id="input-main-title" value="${config.mainTitle}"`);
+            currentHTML = currentHTML.replace(/id="input-accent-title" value=".*?"/, `id="input-accent-title" value="${config.accentTitle}"`);
+            currentHTML = currentHTML.replace(/id="input-btn-text" value=".*?"/, `id="input-btn-text" value="${config.btnText}"`);
+            currentHTML = currentHTML.replace(/id="input-btn-subtext" value=".*?"/, `id="input-btn-subtext" value="${config.btnSubtext}"`);
+            currentHTML = currentHTML.replace(/id="input-disclaimer" value=".*?"/, `id="input-disclaimer" value="${config.disclaimer}"`);
+
+            const blob = new Blob(["<!DOCTYPE html>\n" + currentHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sorti365_copa_mundial_landing.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast("¡Archivo web descargado con éxito!");
+        }
+
+        // Mostrar Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Inicialización automática al cargar el documento
+        window.addEventListener('DOMContentLoaded', () => {
+            updateDOM();
+            initParticles();
+            animateParticles();
+        });
+
+        // ================= SISTEMA DE PARTÍCULAS INTERACTIVO =================
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height; // Comienza abajo
+                this.size = Math.random() * 3 + 0.5;
+                this.speedY = -(Math.random() * 0.8 + 0.2); // Sube despacio
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#22c55e'; // Partículas de luz verde
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#22c55e';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            const numberOfParticles = Math.min(60, Math.floor(window.innerWidth / 15));
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+    </script>
+</body>
+</html>
